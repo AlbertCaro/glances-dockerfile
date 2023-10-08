@@ -1,17 +1,16 @@
-# Usar la imagen base de Python 3 Alpine
+# Using Python 3.8 image as a base
 FROM python:3.8-alpine
 
-# Updating alpine and install all glance's dependencies
-RUN apk update && apk upgrade
+# Update Alpine and then install Glances' dependencies
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache linux-headers gcc python3-dev musl-dev
 
-RUN apk add --no-cache linux-headers gcc python3-dev musl-dev
+# Install Glances dependencies
+RUN pip install bottle psutil==5.3.0
 
-RUN pip install bottle
-
-RUN pip install psutil==5.3.0
-
-# Installs glances as a pip package
+# Install Glances as a pip package
 RUN pip install glances
 
-# Runs glances on web client mode
+# Run Glances in web client mode
 CMD ["glances", "-w"]
